@@ -1,0 +1,32 @@
+:local ether1
+:set ether1 pppoe-out1
+ 
+:local WANIP [/ip address get [find where interface=$ether1] address];
+:set WANIP [:pick $WANIP 0 ([:len $WANIP]-3) ];
+ 
+:if ($WANIP ~"^10.") do={
+:log warning "Private ip address found !!!"
+ 
+/interface pppoe-client enable $ether1
+:delay 1
+} else={
+ 
+:if ($WANIP ~"^172.") do={
+:log warning "Private ip address found !!!"
+ 
+/interface pppoe-client enable $ether1
+:delay 1
+} else={
+ 
+:if ($WANIP ~"^192.") do={
+:log warning "Private ip address found !!!"
+ 
+/interface pppoe-client enable $ether1 
+:delay 1
+} else={
+ 
+:log warning "Public IP - $WANIP - Found, OK ! No action required"
+ 
+}
+}
+}
